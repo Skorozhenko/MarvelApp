@@ -31,17 +31,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-//                composable(
-//                    "Screen_2/{heroId}",
-//                    arguments = listOf(navArgument("heroId") { type = NavType.IntType })
-//                ) { backStackEntry ->
-//                    val heroId = backStackEntry.arguments?.getInt("heroId")
-//                    if (heroId != null) {
-//                        HeroDetail(heroId = heroId) {
-//                            navController.navigate("screen_1")
-//                        }
-//                    }
-//                }
+                composable(
+                    "Screen_2/{heroId}",
+                    arguments = listOf(navArgument("heroId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val heroId = backStackEntry.arguments?.getInt("heroId")
+                    if (heroId != null) {
+                        HeroDetail(heroId = heroId) {
+                            navController.navigate("screen_1")
+                        }
+                    }
+                }
             }
         }
     }
