@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">MarvelApp</string>
+    <string name="app_name">Marvel</string>
+
+    <string name="header">Choose your hero</string>
+
+    <string name="Deadpool">Deadpool</string>
+    <string name="IronMan">Iron Man</string>
+    <string name="CaptainAmerica">Captain America</string>
+    <string name="Spiderman">Spiderman</string>
+    <string name="DoctorStrange">Doctor Strange</string>
+    <string name="Thor">Thor</string>
+    <string name="Thanos">Thanos</string>
+
+    <string name="DeadpoolInfo">Please don’t make the super suit green…or animated!</string>
+    <string name="IronManInfo">I AM IRON MAN</string>
+    <string name="CaptainAmericaInfo">If we can’t accept limitations, then we’re no better than the bad guys.</string>
+    <string name="SpidermanInfo">I just wanted to be like you.</string>
+    <string name="DoctorStrangeInfo">We never lose our demons, Mordo. We only learn to live above them.</string>
+    <string name="ThorInfo">I make grave mistakes all the time. Everything seems to work out.</string>
+    <string name="ThanosInfo">Fun isn\'t something one considers when balancing the universe</string>
 </resources>
