@@ -1,4 +1,4 @@
-package com.example.marvelapp
+package com.example.marvelapp.screens.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.marvelapp.R
 import com.example.marvelapp.ui.theme.AppTheme
 
 @Composable
@@ -22,15 +22,18 @@ fun MarvelHeader() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 35.dp),
+            .padding(AppTheme.Paddings.MarvelHeaderPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.marvel_studio),
             contentDescription = "",
-            modifier = Modifier.size(width = 190.dp, height = 35.dp)
+            modifier = Modifier.size(
+                width = AppTheme.Size.MarvelHeaderImageWidth,
+                height = AppTheme.Size.MarvelHeaderImageHeight
+            )
         )
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(modifier = Modifier.height(AppTheme.Paddings.MarvelHeaderSpacer))
         Text(
             text = stringResource(id = R.string.header),
             style = AppTheme.TextStyle.Default_28,

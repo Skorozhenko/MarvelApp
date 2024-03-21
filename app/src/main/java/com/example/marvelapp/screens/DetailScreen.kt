@@ -1,4 +1,4 @@
-package com.example.marvelapp
+package com.example.marvelapp.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,12 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.marvelapp.screens.components.getHeroById
 import com.example.marvelapp.ui.theme.AppTheme
 
 @Composable
-fun HeroDetail(heroId: Int, onClick: () -> Unit) {
+fun DetailScreen(heroId: Int, onClick: () -> Unit) {
     val hero = getHeroById(heroId)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -42,7 +42,7 @@ fun HeroDetail(heroId: Int, onClick: () -> Unit) {
             onClick = { onClick() },
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 25.dp),
+                .padding(AppTheme.Paddings.HeroDetailButton),
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             shape = CircleShape
         ) {
@@ -56,15 +56,15 @@ fun HeroDetail(heroId: Int, onClick: () -> Unit) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(horizontal = 20.dp)
+                    .padding(AppTheme.Paddings.HeroDetailHorizontalPadding)
             ) {
-                Column(Modifier.padding(bottom = 35.dp)) {
+                Column(Modifier.padding(AppTheme.Paddings.HeroDetailTextPadding)) {
                     Text(
                         text = stringResource(id = hero.name),
                         style = AppTheme.TextStyle.Default_34,
                         color = AppTheme.TextColors.white,
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.Paddings.HeroDetailSpacer))
                     Text(
                         text = stringResource(id = hero.info),
                         style = AppTheme.TextStyle.Default_24,
@@ -78,6 +78,6 @@ fun HeroDetail(heroId: Int, onClick: () -> Unit) {
 
 @Preview
 @Composable
-fun HeroDetailPreview() {
-    HeroDetail(heroId = 3, onClick = {})
+fun DetailScreenPreview() {
+    DetailScreen(heroId = 3, onClick = {})
 }

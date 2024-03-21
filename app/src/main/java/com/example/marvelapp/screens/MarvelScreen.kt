@@ -1,4 +1,4 @@
-package com.example.marvelapp
+package com.example.marvelapp.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -13,7 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.marvelapp.screens.components.MarvelHeader
+import com.example.marvelapp.screens.components.ScrollCard
 import com.example.marvelapp.ui.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -28,7 +29,7 @@ fun MarvelScreen(scrollState: LazyListState, onClick: (Any) -> Unit) {
     ) {
         Canvas(
             modifier = Modifier
-                .size(500.dp)
+                .size(AppTheme.Size.CanvasSize)
                 .align(Alignment.BottomStart)
         ) {
             val path = Path()
