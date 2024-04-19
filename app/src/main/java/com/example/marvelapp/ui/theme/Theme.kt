@@ -1,70 +1,96 @@
 package com.example.marvelapp.ui.theme
 
-import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
-
-@Composable
-fun MarvelAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
+object AppTheme {
+    object TextColors {
+        val white = Color(255,255,255)
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    object ButtonColor {
+        val buttonColor = Color(255, 255, 255)
+    }
+
+    object BgColor {
+        val bgColor = Color(41, 37, 41, 255)
+        val triangleColor = Color(114, 17, 19, 255)
+        val transparent = Color.Transparent
+        val hover = Color.Red.copy(alpha = 0.5f)
+    }
+
+    object Paddings {
+        val HeroCardPadding
+            get() = 20.dp
+
+        val PaddingValues_HeroCard
+            @Composable
+            get() =
+                PaddingValues (start = 20.dp, bottom = 30.dp)
+        val MarvelHeaderPadding
+            @Composable
+            get() =
+                PaddingValues(top = 35.dp)
+        val MarvelHeaderSpacer
+            get() = 35.dp
+        val HeroDetailButton
+            @Composable
+            get() =
+                PaddingValues(top = 25.dp)
+        val HeroDetailHorizontalPadding
+            @Composable
+            get() =
+                PaddingValues(horizontal = 20.dp)
+        val HeroDetailSpacer
+            get() = 20.dp
+        val HeroDetailTextPadding
+            @Composable
+            get() =
+                PaddingValues(bottom = 35.dp)
+    }
+
+    object Size {
+        val HeroCardHeight
+            get() = 550.dp
+        val HeroCardWidth
+            get() = 300.dp
+        val CanvasSize
+            get() = 500.dp
+        val MarvelHeaderImageHeight
+            get() = 35.dp
+        val MarvelHeaderImageWidth
+            get() = 190.dp
+    }
+
+    object TextStyle {
+        val Default_28
+            @Composable get() =
+                TextStyle(
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.W800,
+                    fontSize = 28.sp
+                )
+
+        val Default_34
+            @Composable get() =
+                TextStyle(
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.W800,
+                    fontSize = 34.sp
+                )
+
+        val Default_24
+            @Composable get() =
+                TextStyle(
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 24.sp
+                )
+    }
 }
