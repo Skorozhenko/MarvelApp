@@ -1,0 +1,29 @@
+package com.example.marvelapp.screens.components
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class HeroDataModel(
+    val code: Int,
+    val status: String,
+    val data: DataModel
+)
+
+@Serializable
+data class DataModel(
+    val results: List<ResultsModel>
+)
+
+@Serializable
+data class ResultsModel(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val thumbnail: ThumbnailModel
+)
+
+@Serializable
+data class ThumbnailModel(
+    val path: String,
+    val extension: String
+)
