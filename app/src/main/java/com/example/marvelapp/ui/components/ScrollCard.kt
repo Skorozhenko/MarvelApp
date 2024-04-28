@@ -100,10 +100,10 @@ fun HeroCard(hero: ResultsModel, onItemClick: (Int) -> Unit) {
         contentAlignment = Alignment.BottomStart,
     ) {
         AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current)
-                .data(hero.thumbnail.path + "." + hero.thumbnail.extension)
-                .crossfade(true)
-                .build(),
+            model = convertUrl(
+                url = hero.thumbnail.path ?: "",
+                extension = hero.thumbnail.extension ?: ""
+            ),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),

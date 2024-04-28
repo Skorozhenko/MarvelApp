@@ -31,6 +31,7 @@ import coil.request.ImageRequest
 import com.example.marvelapp.navigation.Screen
 import com.example.marvelapp.ui.components.HeroDataModel
 import com.example.marvelapp.ui.components.MarvelApiStatus
+import com.example.marvelapp.ui.components.convertUrl
 import com.example.marvelapp.ui.theme.AppTheme
 
 @Composable
@@ -79,10 +80,10 @@ fun HeroDetails(navController: NavController, heroData: HeroDataModel?, heroId: 
             val hero = data.data.results.find { it.id == heroId }
             hero?.let { heroInfo ->
                 AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(heroInfo.thumbnail.path + "." + heroInfo.thumbnail.extension)
-                        .crossfade(true)
-                        .build(),
+                    model = convertUrl(
+                        heroInfo.thumbnail.path ?: "",
+                        heroInfo.thumbnail.extension ?: ""
+                    ),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop

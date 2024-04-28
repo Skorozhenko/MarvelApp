@@ -27,3 +27,7 @@ data class ThumbnailModel(
     val path: String,
     val extension: String
 )
+
+
+fun convertUrl(url: String, extension: String): String =
+    "${url.replace("http", "https")}.$extension"
