@@ -1,10 +1,12 @@
-package com.example.marvelapp.retrofit
+package com.example.marvelapp.network
 
+import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.math.BigInteger
 import java.security.MessageDigest
 import javax.inject.Inject
+
 
 class Constants @Inject constructor() : Interceptor {
     private val md5 = MessageDigest.getInstance("MD5")
@@ -25,6 +27,10 @@ class Constants @Inject constructor() : Interceptor {
 
         val requestBuilder = originalRequest.newBuilder().url(url)
         val request = requestBuilder.build()
-        return chain.proceed(request)
+
+        val response = chain.proceed(request)
+        Log.d("Response", response.toString())
+
+        return response
     }
 }
