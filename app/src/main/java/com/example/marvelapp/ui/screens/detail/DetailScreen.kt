@@ -81,8 +81,8 @@ fun HeroDetails(navController: NavController, heroData: HeroDataModel?, heroId: 
             hero?.let { heroInfo ->
                 AsyncImage(
                     model = convertUrl(
-                        heroInfo.thumbnail.path ?: "",
-                        heroInfo.thumbnail.extension ?: ""
+                        heroInfo.thumbnail.path,
+                        heroInfo.thumbnail.extension
                     ),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),

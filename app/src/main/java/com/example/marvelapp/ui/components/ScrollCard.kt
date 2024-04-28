@@ -101,8 +101,8 @@ fun HeroCard(hero: ResultsModel, onItemClick: (Int) -> Unit) {
     ) {
         AsyncImage(
             model = convertUrl(
-                url = hero.thumbnail.path ?: "",
-                extension = hero.thumbnail.extension ?: ""
+                url = hero.thumbnail.path,
+                extension = hero.thumbnail.extension
             ),
             contentDescription = null,
             modifier = Modifier
