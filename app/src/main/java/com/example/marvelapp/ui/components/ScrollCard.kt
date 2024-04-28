@@ -1,6 +1,5 @@
-package com.example.marvelapp.screens.components
+package com.example.marvelapp.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,8 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -20,31 +20,61 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.marvelapp.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ScrollCard(scrollState: LazyListState, heroes: DataModel, onClick: (Int) -> Unit) {
-    Log.d("HeroesList", "Received heroes: $heroes")
+fun ScrollCard(heroes: DataModel?, status: MarvelApiStatus?, onItemClick: (Int) -> Unit, lazyListState: LazyListState) {
 
-    LazyRow(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        state = scrollState,
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = scrollState),
-        content = {
-            items(heroes.results) { hero ->
-                HeroCard(hero = hero, onClick = onClick)
+        contentAlignment = Alignment.Center
+    ) {
+        when (status) {
+            MarvelApiStatus.LOADING -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+
+            MarvelApiStatus.ERROR -> {
+                Text(
+                    text = "Error loading heroes",
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.Red
+                )
+            }
+
+            MarvelApiStatus.DONE -> {
+                LazyRow(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    state = lazyListState,
+                    flingBehavior = rememberSnapFlingBehavior(lazyListState)
+                ) {
+                    heroes?.results?.let { heroesList ->
+                        itemsIndexed(heroesList) { _, hero ->
+                            HeroCard(hero = hero, onItemClick = { onItemClick(hero.id) })
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                CircularProgressIndicator()
             }
         }
-    )
+    }
 }
 
 @Composable
-fun HeroCard(hero: ResultsModel, onClick: (Int) -> Unit = {}) {
+fun HeroCard(hero: ResultsModel, onItemClick: (Int) -> Unit) {
     val isHover = remember { mutableStateOf(false) }
 
     val backgroundColor = if (isHover.value) {
@@ -60,16 +90,20 @@ fun HeroCard(hero: ResultsModel, onClick: (Int) -> Unit = {}) {
                 width = AppTheme.Size.HeroCardWidth
             )
             .padding(AppTheme.Paddings.HeroCardPadding)
+
             .clip(shape = RoundedCornerShape(15.dp))
             .clickable {
                 isHover.value = !isHover.value
-                onClick(hero.id)
+                onItemClick(hero.id)
             }
             .background(backgroundColor),
         contentAlignment = Alignment.BottomStart,
     ) {
         AsyncImage(
-            model = hero.thumbnail.path + hero.thumbnail.extension,
+            model = ImageRequest.Builder(context = LocalContext.current)
+                .data(hero.thumbnail.path + "." + hero.thumbnail.extension)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),
