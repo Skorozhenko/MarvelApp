@@ -1,4 +1,4 @@
-package com.example.marvelapp.screens
+package com.example.marvelapp.ui.screens.marvel
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -6,32 +6,31 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.marvelapp.navigation.Screen
-import com.example.marvelapp.retrofit.MarvelViewModel
-import com.example.marvelapp.screens.components.MarvelHeader
-import com.example.marvelapp.screens.components.ScrollCard
+import com.example.marvelapp.ui.components.MarvelHeader
+import com.example.marvelapp.ui.components.ScrollCard
 import com.example.marvelapp.ui.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun MarvelScreen(navController: NavController) {
-    val viewModel: MarvelViewModel = viewModel()
-    val heroItems by viewModel.heroDataModel.collectAsState()
-    val scrollState = rememberLazyListState()
-
+fun MarvelScreen(marvelViewModel: MarvelViewModel, lazyListState: LazyListState, onClick: (Int) -> Unit) {
     ApplySystemBarColors()
+
+    val heroes by marvelViewModel.heroesDataModel.observeAsState()
+    val status by marvelViewModel.status.observeAsState()
+
+    LaunchedEffect(key1 = true) {
+        marvelViewModel.getHeroesList()
+    }
 
     Box(
         modifier = Modifier
@@ -55,15 +54,9 @@ fun MarvelScreen(navController: NavController) {
 
     Column {
         MarvelHeader()
-
-        heroItems.heroModel?.data?.let { data ->
-            ScrollCard(scrollState = scrollState, heroes = data) { heroId ->
-                navController.navigate(Screen.DetailScreen.route + "/$heroId")
-            }
-        }
+        ScrollCard(heroes?.data, status, onItemClick = onClick, lazyListState = lazyListState)
     }
 }
-
 
 @Composable
 private fun ApplySystemBarColors() {
@@ -77,5 +70,5 @@ private fun ApplySystemBarColors() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMarvelScreen() {
-    MarvelScreen(navController = rememberNavController())
+    //MarvelScreen(navController = rememberNavController())
 }
