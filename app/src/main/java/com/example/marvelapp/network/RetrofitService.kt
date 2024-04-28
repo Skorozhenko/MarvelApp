@@ -1,6 +1,9 @@
-package com.example.marvelapp.retrofit
+package com.example.marvelapp.network
 
-import com.example.marvelapp.retrofit.api.MarvelApi
+import android.util.Log
+import com.example.marvelapp.network.api.MarvelApi
+import com.example.marvelapp.data.repository.MarvelRepository
+import com.example.marvelapp.data.repository.MarvelRepositoryImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -11,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,14 +23,18 @@ class RetrofitService {
     @Provides
     fun provideOkHttpClient(constants: Constants): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(createLogging())
+            .addInterceptor(createLoggingInterceptor())
             .addInterceptor(constants)
             .build()
     }
 
-    private fun createLogging(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor()
-            .setLevel(HttpLoggingInterceptor.Level.BASIC)
+    private fun createLoggingInterceptor(): HttpLoggingInterceptor {
+        val logger = HttpLoggingInterceptor.Logger { message ->
+            Log.d("OkHttp", message)
+        }
+        val loggingInterceptor = HttpLoggingInterceptor(logger)
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return loggingInterceptor
     }
 
     @Provides
@@ -39,6 +47,12 @@ class RetrofitService {
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMarvelRepository(api: MarvelApi): MarvelRepository {
+        return MarvelRepositoryImpl(api)
     }
 
     @Provides
