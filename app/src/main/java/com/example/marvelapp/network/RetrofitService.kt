@@ -1,6 +1,10 @@
 package com.example.marvelapp.network
 
 import android.util.Log
+import com.example.marvelapp.data.local.AppDatabase
+import com.example.marvelapp.data.local.dao.HeroDao
+import com.example.marvelapp.data.mapper.HeroDtoToEntityMapper
+import com.example.marvelapp.data.mapper.HeroEntityToUiMapper
 import com.example.marvelapp.network.api.MarvelApi
 import com.example.marvelapp.data.repository.MarvelRepository
 import com.example.marvelapp.data.repository.MarvelRepositoryImpl
@@ -51,8 +55,13 @@ class RetrofitService {
 
     @Provides
     @Singleton
-    fun provideMarvelRepository(api: MarvelApi): MarvelRepository {
-        return MarvelRepositoryImpl(api)
+    fun provideMarvelRepository(
+        api: MarvelApi,
+        dao: HeroDao,
+        dtoToEntityMapper: HeroDtoToEntityMapper,
+        entityToUiMapper: HeroEntityToUiMapper)
+    : MarvelRepository {
+        return MarvelRepositoryImpl(api, dao, dtoToEntityMapper, entityToUiMapper)
     }
 
     @Provides
