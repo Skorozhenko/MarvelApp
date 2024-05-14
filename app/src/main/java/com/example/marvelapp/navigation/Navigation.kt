@@ -10,52 +10,45 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.marvelapp.MainActivity
-import com.example.marvelapp.screens.DetailScreen
-import com.example.marvelapp.screens.MarvelScreen
+import com.example.marvelapp.ui.screens.marvel.MarvelViewModel
+import com.example.marvelapp.ui.screens.marvel.MarvelScreen
+import com.example.marvelapp.ui.screens.detail.DetailViewModel
+import com.example.marvelapp.ui.screens.detail.DetailScreen
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    marvelViewModel: MarvelViewModel,
+    detailViewModel: DetailViewModel
+) {
     val navController = rememberNavController()
-    val scrollState = rememberLazyListState()
 
     val context = LocalContext.current
-
     val onBackPressedDispatcher = (context as MainActivity).onBackPressedDispatcher
 
-    val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {}
-    }
-    onBackPressedDispatcher.addCallback(callback)
-
+    val lazyListState = rememberLazyListState()
 
     NavHost(
         navController = navController,
         startDestination = Screen.MainScreen.route
-
     ) {
         composable(Screen.MainScreen.route) {
-            MarvelScreen(scrollState) { heroId ->
+            MarvelScreen(marvelViewModel, lazyListState) { heroId ->
                 navController.navigate(Screen.DetailScreen.route + "/$heroId")
             }
         }
 
         composable(
-            Screen.DetailScreen.route + "/{heroId}",
+            route = "${Screen.DetailScreen.route}/{heroId}",
             arguments = listOf(navArgument("heroId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val heroId = backStackEntry.arguments?.getInt("heroId")
-            if (heroId != null) {
-                DetailScreen(heroId = heroId) {
+            val heroId = backStackEntry.arguments?.getInt("heroId") ?: -1
+            DetailScreen(navController, detailViewModel, heroId)
+            val callback = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
                     navController.navigate(Screen.MainScreen.route)
                 }
-
-                val callback = object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        navController.navigate(Screen.MainScreen.route)
-                    }
-                }
-                onBackPressedDispatcher.addCallback(callback)
             }
+            onBackPressedDispatcher.addCallback(callback)
         }
     }
 }
