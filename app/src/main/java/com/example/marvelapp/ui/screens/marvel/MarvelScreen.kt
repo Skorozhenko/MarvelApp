@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.marvelapp.data.model.ui.UiResultsModel
 import com.example.marvelapp.ui.components.MarvelHeader
 import com.example.marvelapp.ui.components.ScrollCard
 import com.example.marvelapp.ui.theme.AppTheme
@@ -52,10 +53,19 @@ fun MarvelScreen(marvelViewModel: MarvelViewModel, lazyListState: LazyListState,
         }
     }
 
-    Column {
-        MarvelHeader()
-        ScrollCard(heroes?.data, status, onItemClick = onClick, lazyListState = lazyListState)
+    when (heroes) {
+        is List<UiResultsModel> -> {
+            Column {
+                MarvelHeader()
+                ScrollCard(heroes!!, status, onClick, lazyListState)
+            }
+        }
     }
+
+//    Column {
+//        MarvelHeader()
+//        ScrollCard(heroes, status, onItemClick = onClick, lazyListState = lazyListState)
+//    }
 }
 
 @Composable
