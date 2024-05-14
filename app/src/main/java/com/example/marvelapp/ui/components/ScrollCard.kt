@@ -22,16 +22,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.example.marvelapp.data.model.ui.UiDataModel
+import com.example.marvelapp.data.model.ui.UiResultsModel
 import com.example.marvelapp.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ScrollCard(heroes: DataModel?, status: MarvelApiStatus?, onItemClick: (Int) -> Unit, lazyListState: LazyListState) {
-
+fun ScrollCard(
+    heroes: List<UiResultsModel>,
+    status: MarvelApiStatus?,
+    onItemClick: (Int) -> Unit,
+    lazyListState: LazyListState)
+{
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -58,10 +62,8 @@ fun ScrollCard(heroes: DataModel?, status: MarvelApiStatus?, onItemClick: (Int) 
                     state = lazyListState,
                     flingBehavior = rememberSnapFlingBehavior(lazyListState)
                 ) {
-                    heroes?.results?.let { heroesList ->
-                        itemsIndexed(heroesList) { _, hero ->
-                            HeroCard(hero = hero, onItemClick = { onItemClick(hero.id) })
-                        }
+                    itemsIndexed(heroes) { _, hero ->
+                        HeroCard(hero = hero, onItemClick = { onItemClick(hero.id) })
                     }
                 }
             }
@@ -74,7 +76,7 @@ fun ScrollCard(heroes: DataModel?, status: MarvelApiStatus?, onItemClick: (Int) 
 }
 
 @Composable
-fun HeroCard(hero: ResultsModel, onItemClick: (Int) -> Unit) {
+fun HeroCard(hero: UiResultsModel, onItemClick: (Int) -> Unit) {
     val isHover = remember { mutableStateOf(false) }
 
     val backgroundColor = if (isHover.value) {
@@ -100,10 +102,7 @@ fun HeroCard(hero: ResultsModel, onItemClick: (Int) -> Unit) {
         contentAlignment = Alignment.BottomStart,
     ) {
         AsyncImage(
-            model = convertUrl(
-                url = hero.thumbnail.path,
-                extension = hero.thumbnail.extension
-            ),
+            model = hero.thumbnail,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),
