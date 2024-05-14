@@ -23,15 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.example.marvelapp.data.model.ui.UiResultsModel
 import com.example.marvelapp.navigation.Screen
-import com.example.marvelapp.ui.components.HeroDataModel
 import com.example.marvelapp.ui.components.MarvelApiStatus
-import com.example.marvelapp.ui.components.convertUrl
 import com.example.marvelapp.ui.theme.AppTheme
 
 @Composable
@@ -74,16 +71,12 @@ fun DetailScreen(navController: NavController, viewModel: DetailViewModel, heroI
 }
 
 @Composable
-fun HeroDetails(navController: NavController, heroData: HeroDataModel?, heroId: Int) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        heroData?.let { data ->
-            val hero = data.data.results.find { it.id == heroId }
-            hero?.let { heroInfo ->
+fun HeroDetails(navController: NavController, heroData: UiResultsModel, heroId: Int) {
+    if (heroData.id == heroId) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            heroData.let { heroInfo ->
                 AsyncImage(
-                    model = convertUrl(
-                        heroInfo.thumbnail.path,
-                        heroInfo.thumbnail.extension
-                    ),
+                    model = heroInfo.thumbnail,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
